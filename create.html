@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post - Green Pastures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">✝️ Green Pastures</h1>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="create.html" class="active">Create Post</a>
+                    <button class="cart-btn" onclick="toggleCart()">
+                        🛒 Cart (<span id="cart-count">0</span>)
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Create Post Section -->
+    <section class="create-post-section">
+        <div class="container">
+            <div class="create-post-header">
+                <h2>✍️ Create New Post</h2>
+                <p>Share your knowledge, books, videos, or podcasts with the world!</p>
+            </div>
+
+            <form id="create-post-form" class="create-post-form">
+                <!-- Category Selection -->
+                <div class="form-section">
+                    <h3>Post Type</h3>
+                    <div class="form-group">
+                        <label for="category">What type of content are you creating? *</label>
+                        <select id="category" name="category" required onchange="handleCategoryChange(this.value)">
+                            <option value="">-- Select Category --</option>
+                            <option value="article">📝 Article / Blog Post</option>
+                            <option value="book">📚 Book</option>
+                            <option value="video">🎥 Video</option>
+                            <option value="audio">🎧 Podcast / Audio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Basic Information (Always shown) -->
+                <div class="form-section">
+                    <h3>Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            placeholder="Enter a compelling title..."
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author">Author Name *</label>
+                        <input 
+                            type="text" 
+                            id="author" 
+                            name="author" 
+                            placeholder="Your name or pen name..."
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="excerpt">Short Description / Excerpt *</label>
+                        <textarea 
+                            id="excerpt" 
+                            name="excerpt" 
+                            rows="3"
+                            placeholder="Write a brief summary (150-300 characters)..."
+                            required
+                            oninput="updateExcerptCount()"
+                        ></textarea>
+                        <small id="excerpt-count">0 / 300 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags (comma-separated) *</label>
+                        <input 
+                            type="text" 
+                            id="tags" 
+                            name="tags" 
+                            placeholder="e.g., JavaScript, Tutorial, Web Development"
+                            required
+                        />
+                        <small>Separate tags with commas. Min 2, Max 5 tags.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thumbnail">Thumbnail Image URL *</label>
+                        <input 
+                            type="url" 
+                            id="thumbnail" 
+                            name="thumbnail" 
+                            placeholder="https://example.com/image.jpg"
+                            required
+                            oninput="previewThumbnail()"
+                        />
+                        <small>Use Unsplash, Pexels, or any image URL</small>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                        <label>Thumbnail Preview:</label>
+                        <img id="thumbnail-preview" class="thumbnail-preview" alt="Thumbnail preview" />
+                    </div>
+                </div>
+
+                <!-- Article-specific fields -->
+                <div class="form-section" id="article-fields" style="display: none;">
+                    <h3>Article Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="content">Article Content (HTML) *</label>
+                        <textarea 
+                            id="content" 
+                            name="content" 
+                            rows="15"
+                            placeholder="Write your article content here. You can use HTML tags like <p>, <h3>, <ul>, <li>, etc."
+                        ></textarea>
+                        <small>Use HTML for formatting: &lt;h3&gt;Heading&lt;/h3&gt;, &lt;p&gt;Paragraph&lt;/p&gt;, &lt;ul&gt;&lt;li&gt;List&lt;/li&gt;&lt;/ul&gt;</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="readTime">Reading Time (minutes) *</label>
+                            <input 
+                                type="number" 
+                                id="readTime" 
+                                name="readTime" 
+                                min="1" 
+                                max="120"
+                                placeholder="e.g., 8"
+                            />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subCategory">Sub Category *</label>
+                        <select id="subCategory" name="subCategory">
+                            <option value="">-- Select Sub Category --</option>
+                            <option value="word">Word</option>
+                            <option value="parenting">Parenting</option>
+                            <option value="marriage">Marriage</option>
+                            <option value="lifestyle">Lifestyle</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Book-specific fields -->
+                <div class="form-section" id="book-fields" style="display: none;">
+                    <h3>Book Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="book-content">Book Description *</label>
+                        <textarea 
+                            id="book-content" 
+                            name="book-content" 
+                            rows="10"
+                            placeholder="Describe the book, what's inside, who it's for, etc. (HTML allowed)"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="price">Price (₦) *</label>
+                            <input 
+                                type="number" 
+                                id="price" 
+                                name="price" 
+                                min="0"
+                                placeholder="e.g., 15000"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pages">Number of Pages *</label>
+                            <input 
+                                type="number" 
+                                id="pages" 
+                                name="pages" 
+                                min="1"
+                                placeholder="e.g., 350"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rating">Rating (1-5) *</label>
+                            <input 
+                                type="number" 
+                                id="rating" 
+                                name="rating" 
+                                min="1" 
+                                max="5" 
+                                step="0.1"
+                                placeholder="e.g., 4.5"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="inStock" name="inStock" checked />
+                            In Stock
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Video-specific fields -->
+                <div class="form-section" id="video-fields" style="display: none;">
+                    <h3>Video Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="videoUrl">YouTube Embed URL *</label>
+                        <input 
+                            type="url" 
+                            id="videoUrl" 
+                            name="videoUrl" 
+                            placeholder="https://www.youtube.com/embed/VIDEO_ID"
+                        />
+                        <small>Get embed URL: Share → Embed → Copy URL from iframe src</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="video-duration">Duration *</label>
+                        <input 
+                            type="text" 
+                            id="video-duration" 
+                            name="video-duration" 
+                            placeholder="e.g., 2:30:00"
+                        />
+                        <small>Format: HH:MM:SS or MM:SS</small>
+                    </div>
+                </div>
+
+                <!-- Audio-specific fields -->
+                <div class="form-section" id="audio-fields" style="display: none;">
+                    <h3>Podcast / Audio Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="audioUrl">Audio File URL *</label>
+                        <input 
+                            type="url" 
+                            id="audioUrl" 
+                            name="audioUrl" 
+                            placeholder="https://example.com/podcast.mp3"
+                        />
+                        <small>Direct link to .mp3 file</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="audio-duration">Duration *</label>
+                        <input 
+                            type="text" 
+                            id="audio-duration" 
+                            name="audio-duration" 
+                            placeholder="e.g., 45:00"
+                        />
+                        <small>Format: HH:MM:SS or MM:SS</small>
+                    </div>
+                </div>
+
+                <!-- Additional Options -->
+                <div class="form-section">
+                    <h3>Additional Options</h3>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="featured" name="featured" />
+                            Mark as Featured Post
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="resetForm()">
+                        Clear Form
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        🚀 Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Sidebar (same as index.html) -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <button class="close-btn" onclick="toggleCart()">×</button>
+        </div>
+        
+        <div id="cart-items" class="cart-items">
+            <!-- Cart items will be rendered here -->
+        </div>
+        
+        <div id="cart-empty" class="cart-empty">
+            <p>Your cart is empty</p>
+            <p>Add some books to get started!</p>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">₦0</span>
+            </div>
+            <div class="cart-total">
+                <span>Tax (7.5%):</span>
+                <span id="cart-tax">₦0</span>
+            </div>
+            <div class="cart-total total">
+                <span>Total:</span>
+                <span id="cart-total">₦0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

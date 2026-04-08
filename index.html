@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Pastures - Nourishing Your Soul</title>
+    <link rel="stylesheet" href="style.css">
+    <link 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+    rel="stylesheet"
+    >
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">✝️ Green Pastures</h1>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="create.html">Create Post</a>
+                    <button class="cart-btn" onclick="toggleCart()">
+                        🛒 Cart (<span id="cart-count">0</span>)
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Sliding background images -->
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1600')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1600')"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=1600')"></div>
+        </div>
+
+        <!-- Dark overlay -->
+        <div class="hero-overlay"></div>
+
+        <!-- Content stays on top -->
+        <div class="container">
+            <h2>Welcome to Green Pastures</h2>
+            <p>Nourishing your soul with Godly Articles, Books, Videos & Podcasts</p>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Search posts, books, videos..."
+                    oninput="handleSearch(this.value)"
+                />
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filter -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByCategory('all', this)">
+                    All Content
+                </button>
+                <button class="filter-btn" onclick="filterByCategory('article', this)">
+                    📝 Articles
+                </button>
+                <button class="filter-btn" onclick="filterByCategory('book', this)">
+                    📚 Books
+                </button>
+                <button class="filter-btn" onclick="filterByCategory('video', this)">
+                    🎥 Videos
+                </button>
+                <button class="filter-btn" onclick="filterByCategory('audio', this)">
+                    🎧 Podcasts
+                </button>
+            </div>
+            <!-- Subcategory filters (shown only for articles) -->
+            <div class="subcategory-buttons" id="subcategory-buttons" style="display:none;">
+                <button class="subcategory-btn active" onclick="filterBySubCategory('all', this)">All Articles</button>
+                <button class="subcategory-btn" onclick="filterBySubCategory('word', this)">Word</button>
+                <button class="subcategory-btn" onclick="filterBySubCategory('parenting', this)">Parenting</button>
+                <button class="subcategory-btn" onclick="filterBySubCategory('marriage', this)">Marriage</button>
+                <button class="subcategory-btn" onclick="filterBySubCategory('lifestyle', this)">Lifestyle</button>
+            </div>
+            
+            <!-- Sort Options -->
+            <div class="sort-container">
+                <label>Sort by:</label>
+                <select id="sort-select" onchange="handleSort(this.value)">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Dashboard -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="total-posts">0</h3>
+                    <p>Total Posts</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-articles">0</h3>
+                    <p>Articles</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-books">0</h3>
+                    <p>Books</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-videos">0</h3>
+                    <p>Videos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <main class="main">
+        <div class="container">
+            <div id="posts-grid" class="posts-grid">
+                <!-- Posts will be rendered here dynamically -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <h3>No posts found</h3>
+                <p>Try adjusting your filters or search term</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shopping Cart Sidebar (for books) -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+        </div>
+        
+        <div id="cart-items" class="cart-items">
+            <!-- Cart items will be rendered here -->
+        </div>
+        
+        <div id="cart-empty" class="cart-empty">
+            <p>Your cart is empty</p>
+            <p>Add some books to get started!</p>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">₦0</span>
+            </div>
+            <div class="cart-total">
+                <span>Tax (7.5%):</span>
+                <span id="cart-tax">₦0</span>
+            </div>
+            <div class="cart-total total">
+                <span>Total:</span>
+                <span id="cart-total">₦0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Single Post Modal -->
+    <div id="post-modal" class="post-modal">
+        <div class="post-modal-overlay" onclick="closePostModal()"></div>
+        <div class="post-modal-content">
+            <button class="post-modal-close" onclick="closePostModal()">×</button>
+            <div id="post-modal-body">
+                <!-- Post content will be rendered here -->
+            </div>
+        </div>
+    </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
